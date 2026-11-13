@@ -79,6 +79,13 @@ class ReporteDetalle(ReporteResumen):
     resuelto_en: datetime | None
     seguimiento: list[SeguimientoOut]
 
+class ReporteAdmin(ReporteResumen):
+    ciudadano: str
+    cuadrilla: str | None
+    tiene_foto: bool
+    tiene_foto_cierre: bool
+
+
 class CambioEstadoIn(BaseModel):
     estado: Estado
     cuadrilla: str | None = Field(default=None, max_length=80)

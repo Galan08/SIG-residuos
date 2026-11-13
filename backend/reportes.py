@@ -5,6 +5,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from pathlib import Path
 from uuid import uuid4
+import json
 
 from fastapi import File, UploadFile
 from auth import solo_admin, usuario_actual
@@ -111,6 +112,39 @@ def listar_reportes(
     return [a_resumen(r) for r in db.scalars(consulta)]
 
 
+@router.get("/mapa")
+def mapa_reportes(
+    estado: Estado | None = Query(default=None),
+    db: Session = Depends(get_db),
+    usuario: Usuario = Depends(usuario_actual),
+):
+    """Reportes como GeoJSON para el mapa: el ciudadano ve los suyos y el administrador todos."""
+    consulta = select(Reporte, func.ST_AsGeoJSON(Reporte.ubicacion)).order_by(Reporte.id)
+    if usuario.rol != "administrador":
+        consulta = consulta.where(Reporte.usuario_id == usuario.id)
+    if estado:
+        consulta = consulta.where(Reporte.estado == estado)
+
+    features = []
+    for r, geometria in db.execute(consulta):
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": json.loads(geometria),
+                "properties": {
+                    "id": r.id,
+                    "codigo": f"SR-{r.id:04d}",
+                    "tipo_residuo": r.tipo_residuo,
+                    "barrio": r.barrio,
+                    "direccion": r.direccion,
+                    "estado": r.estado,
+                    "creado_en": r.creado_en.isoformat(),
+                },
+            }
+        )
+    return {"type": "FeatureCollection", "features": features}
+
+
 @router.get("/{reporte_id}", response_model=ReporteDetalle)
 def detalle_reporte(
     reporte_id: int,
@@ -142,6 +176,12 @@ def cambiar_estado(
             f"El reporte ya está en estado {datos.estado}",
         )
      
+    if datos.estado == "limpio" and not reporte.foto_cierre_url:
+        raise HTTPException(
+            status.HTTP_409_CONFLICT,
+            "Sube la foto de cierre antes de marcar el reporte como limpio",
+        )
+
     if datos.cuadrilla:
         reporte.cuadrilla = datos.cuadrilla
 
