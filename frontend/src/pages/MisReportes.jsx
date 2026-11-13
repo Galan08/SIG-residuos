@@ -72,6 +72,10 @@ export default function MisReportes() {
         </p>
       )}
 
+      {reportes.length > 0 && visibles.length === 0 && (
+        <div className="aviso vacio">No tienes reportes en estado "{FILTROS.find((f) => f.clave === filtro).texto}".</div>
+      )}
+
       {visibles.map((r) => (
         <Link key={r.id} to={`/mis-reportes/${r.id}`} className="reporte">
           <div className="icono">{ICONOS[r.tipo_residuo] ?? "🗑️"}</div>

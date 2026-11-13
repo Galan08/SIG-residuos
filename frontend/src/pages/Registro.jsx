@@ -10,6 +10,7 @@ export default function Registro() {
     nombre_completo: "",
     correo: "",
     celular: "",
+    barrio: "",
     password: "",
     confirmar: "",
     terminos: false,
@@ -42,6 +43,7 @@ export default function Registro() {
         nombre_completo: form.nombre_completo.trim(),
         correo: form.correo.trim(),
         celular: form.celular.trim() || null,
+        barrio: form.barrio.trim() || null,
         password: form.password,
       });
       await login(form.correo.trim(), form.password);
@@ -81,6 +83,12 @@ export default function Registro() {
           Celular (opcional)
           <input name="celular" placeholder="Tu número de celular"
             value={form.celular} onChange={cambiar} />
+        </label>
+
+        <label className="campo">
+          Barrio (opcional)
+          <input name="barrio" placeholder="Barrio donde vives"
+            value={form.barrio} onChange={cambiar} />
         </label>
 
         <label className="campo">

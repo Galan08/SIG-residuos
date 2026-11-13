@@ -8,6 +8,10 @@ import MisReportes from "./pages/MisReportes";
 import Perfil from "./pages/Perfil";
 import Registro from "./pages/Registro";
 import DetalleReporte from "./pages/DetalleReporte";
+import Mapa from "./pages/Mapa";
+import AdminReportes from "./pages/AdminReportes";
+import GestionarReporte from "./pages/GestionarReporte";
+import RutaAdmin from "./components/RutaAdmin";
 
 export default function App() {
   return (
@@ -21,7 +25,12 @@ export default function App() {
               <Route path="/" element={<Inicio />} />
               <Route path="/mis-reportes" element={<MisReportes />} />
               <Route path="/mis-reportes/:id" element={<DetalleReporte />} />
+              <Route path="/mapa" element={<Mapa />} />
               <Route path="/perfil" element={<Perfil />} />
+              <Route element={<RutaAdmin />}>
+                <Route path="/admin" element={<AdminReportes />} />
+                <Route path="/admin/reportes/:id" element={<GestionarReporte />} />
+              </Route>
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

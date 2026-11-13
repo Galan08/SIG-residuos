@@ -79,6 +79,8 @@ cd SIG-residuos
 
 Si falla en `CREATE EXTENSION postgis`, falta instalar PostGIS con Application Stack Builder.
 
+**Datos de prueba (opcional):** abre y ejecuta también `database/datos_prueba.sql`. Crea un administrador (`admin@prueba.sigresiduos`), dos ciudadanos (`laura@prueba.sigresiduos` y `andres@prueba.sigresiduos`) y seis reportes en Ocaña. La contraseña de todos es `Clave1234`. Se puede ejecutar varias veces: borra y vuelve a crear esos usuarios.
+
 ### 3. Backend (puerto 8000)
 
 Desde la carpeta `backend`:
@@ -167,14 +169,26 @@ UPDATE usuarios SET rol = 'administrador' WHERE correo = 'tu_correo@ejemplo.com'
 | GET | `/auth/me` | Usuario de la sesión | Con sesión |
 | POST | `/reportes` | Crear reporte con coordenadas | Con sesión |
 | GET | `/reportes?estado=` | Listar mis reportes (filtro opcional) | Con sesión |
+| GET | `/reportes/mapa?estado=` | Reportes en GeoJSON para el mapa (propios; el admin ve todos) | Con sesión |
 | GET | `/reportes/{id}` | Detalle con seguimiento | Dueño o admin |
 | POST | `/reportes/{id}/foto` | Subir foto del reporte | Dueño |
 | POST | `/reportes/{id}/foto-cierre` | Subir foto de cierre | Admin |
-| PATCH | `/reportes/{id}/estado` | Cambiar estado | Admin |
+| PATCH | `/reportes/{id}/estado` | Cambiar estado y cuadrilla (para marcar `limpio` hace falta la foto de cierre) | Admin |
+| GET | `/admin/reportes?estado=&barrio=` | Listar todos los reportes | Admin |
 | GET / PUT | `/perfil` | Ver o editar perfil con aporte | Con sesión |
 | PATCH | `/perfil/notificaciones` | Activar o desactivar avisos | Con sesión |
 
 Estados válidos de un reporte: `pendiente`, `en_proceso`, `limpio`.
+
+## Pruebas del backend
+
+Las pruebas usan la base configurada en `backend/.env` (con `schema.sql` ya ejecutado). Crean usuarios temporales y los borran al terminar.
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+pytest
+```
 
 ## Flujo de trabajo con Git
 

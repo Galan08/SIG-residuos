@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import api, { API_URL, mensajeError } from "../api";
 import EstadoBadge from "../components/EstadoBadge";
+import MapaUbicacion from "../components/MapaUbicacion";
 import { fechaCorta, fechaHora } from "../estados";
+import { coordenadas } from "../mapa";
 
 const PASOS = [
   { estado: "pendiente", titulo: "Reporte recibido", espera: "" },
@@ -25,6 +27,7 @@ function Foto({ url, texto }) {
 export default function DetalleReporte() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const creado = useLocation().state?.creado;
   const [reporte, setReporte] = useState(null);
   const [error, setError] = useState("");
 
@@ -53,6 +56,7 @@ export default function DetalleReporte() {
 
       {reporte && (
         <div className="contenido detalle">
+          {creado && <div className="aviso exito">¡Reporte enviado! Te avisaremos cuando cambie su estado.</div>}
           <span className="codigo">#{reporte.codigo}</span>
           <h2>{reporte.tipo_residuo}</h2>
           <div className="meta-linea">
@@ -79,6 +83,10 @@ export default function DetalleReporte() {
               </div>
             </>
           )}
+
+          <h3>Ubicación</h3>
+          <MapaUbicacion posicion={[reporte.latitud, reporte.longitud]} alto={180} />
+          <p className="coordenadas">Coordenadas: {coordenadas(reporte.latitud, reporte.longitud)}</p>
 
           <h3>Seguimiento</h3>
           {PASOS.map((p) => {

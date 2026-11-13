@@ -167,3 +167,65 @@ body {
   background: #fff; color: var(--verde); border: 1px solid var(--verde);
   margin-top: 16px; text-align: center; text-decoration: none; display: block;
 }
+/* Formulario de reporte y mapas */
+.campo textarea, .campo select {
+  display: block; width: 100%; margin-top: 6px; padding: 12px;
+  border: 1px solid var(--borde); border-radius: 10px; font-size: 15px;
+  background: #f9fbfa; font-family: inherit;
+}
+.campo textarea:focus, .campo select:focus { outline: 2px solid var(--verde); border-color: var(--verde); }
+.ayuda { font-size: 13px; color: var(--gris); margin: 0 0 10px; }
+.coordenadas { font-size: 12px; color: var(--gris); margin: 8px 0 14px; }
+
+.pasos { display: flex; gap: 6px; list-style: none; padding: 0; margin: 0 0 16px; }
+.pasos li {
+  flex: 1; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);
+  border-bottom: 3px solid var(--borde); padding-bottom: 6px;
+}
+.pasos li span {
+  width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--borde); color: #fff; font-size: 11px; flex-shrink: 0;
+}
+.pasos li.actual { color: var(--verde); font-weight: 600; border-color: var(--verde); }
+.pasos li.actual span, .pasos li.hecho span { background: var(--verde); }
+.pasos li.hecho { border-color: var(--verde); }
+
+.mapa { width: 100%; border-radius: 12px; border: 1px solid var(--borde); z-index: 0; }
+.leaflet-popup-content { font-size: 13px; line-height: 1.5; }
+.leaflet-popup-content a { color: var(--verde); font-weight: 600; }
+
+.selector-foto {
+  display: grid; place-items: center; text-align: center; cursor: pointer;
+  border: 2px dashed var(--borde); border-radius: 12px; aspect-ratio: 4 / 3;
+  background: #f9fbfa; color: var(--gris); font-size: 14px; overflow: hidden; margin-bottom: 14px;
+}
+.selector-foto span { line-height: 1.8; font-size: 14px; }
+.selector-foto img { width: 100%; height: 100%; object-fit: cover; }
+.selector-foto input { display: none; }
+
+.tipos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.tipo {
+  display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--borde); background: #fff; font-size: 13px; cursor: pointer; text-align: left;
+  color: var(--texto);
+}
+.tipo span { font-size: 20px; }
+.tipo.activo { border-color: var(--verde); background: var(--verde-claro); font-weight: 600; }
+
+.acciones { display: flex; gap: 10px; margin-top: 18px; }
+.acciones .btn { flex: 1; }
+.acciones .btn.contorno { margin-top: 0; }
+
+.aviso.vacio { margin: 0 0 12px; text-align: center; }
+.aviso.exito { margin: 0 0 12px; font-size: 14px; }
+
+.leyenda { display: flex; gap: 14px; justify-content: center; font-size: 12px; color: var(--gris); margin-top: 10px; }
+.leyenda i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+
+.buscar { display: flex; gap: 8px; margin-bottom: 10px; }
+.buscar input {
+  flex: 1; padding: 8px 12px; border: 1px solid var(--borde); border-radius: 99px; font-size: 14px;
+}
+.detalle .btn { margin-top: 6px; }
+.selector-foto.compacto { aspect-ratio: auto; padding: 12px; margin-top: 8px; }
+.selector-foto.compacto span { font-size: 13px; }
