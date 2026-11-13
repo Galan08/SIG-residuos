@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import api, { API_URL, mensajeError } from "../api";
+import api, { mensajeError, urlFoto } from "../api";
 import EstadoBadge from "../components/EstadoBadge";
 import MapaUbicacion from "../components/MapaUbicacion";
 import { fechaCorta, fechaHora } from "../estados";
@@ -19,7 +19,7 @@ function ultimoPaso(seguimiento, estado) {
 function Foto({ url, texto }) {
   return (
     <div className="foto">
-      {url ? <img src={`${API_URL}${url}`} alt={texto} /> : <span>{texto}</span>}
+      {url ? <img src={urlFoto(url)} alt={texto} /> : <span>{texto}</span>}
     </div>
   );
 }

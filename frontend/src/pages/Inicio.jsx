@@ -5,7 +5,7 @@ import api, { mensajeError } from "../api";
 import MapaUbicacion from "../components/MapaUbicacion";
 import SelectorFoto from "../components/SelectorFoto";
 import { ICONOS } from "../estados";
-import { errorFoto } from "../fotos";
+import { errorFoto, reducirFoto } from "../fotos";
 import { OCANA, coordenadas } from "../mapa";
 
 const PASOS = ["Ubicación", "Foto", "Descripción"];
@@ -86,7 +86,7 @@ export default function Inicio() {
       });
       id = data.id;
       const datos = new FormData();
-      datos.append("archivo", foto);
+      datos.append("archivo", await reducirFoto(foto));
       await api.post(`/reportes/${id}/foto`, datos);
       navigate(`/mis-reportes/${id}`, { state: { creado: true } });
     } catch (err) {

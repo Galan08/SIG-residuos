@@ -1,6 +1,13 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:8000";
+// En local apunta al backend de uvicorn; en Vercel se define VITE_API_URL
+export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
+
+// Las fotos guardadas en local llegan como "/uploads/..."; las de Supabase Storage ya traen la URL completa
+export function urlFoto(url) {
+  if (!url) return "";
+  return /^https?:\/\//.test(url) ? url : `${API_URL}${url}`;
+}
 
 const api = axios.create({ baseURL: API_URL });
 

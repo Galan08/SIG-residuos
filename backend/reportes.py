@@ -3,11 +3,11 @@ from geoalchemy2 import WKTElement
 from geoalchemy2.shape import to_shape
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from pathlib import Path
 from uuid import uuid4
 import json
 
 from fastapi import File, UploadFile
+import almacenamiento
 from auth import solo_admin, usuario_actual
 from database import get_db
 from models import Reporte, Seguimiento, Usuario
@@ -15,8 +15,6 @@ from schemas import CambioEstadoIn, Estado, ReporteDetalle, ReporteIn, ReporteRe
 
 router = APIRouter(prefix="/reportes", tags=["Reportes"])
 
-UPLOAD_DIR = Path(__file__).resolve().parent / "uploads" / "reportes"
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 MAX_BYTES = 10 * 1024 * 1024  # 10 MB
 
 
@@ -43,8 +41,7 @@ def guardar_imagen(archivo: UploadFile, reporte_id: int) -> str:
         )
 
     nombre = f"{reporte_id}-{uuid4().hex}{extension}"
-    (UPLOAD_DIR / nombre).write_bytes(contenido)
-    return f"/uploads/reportes/{nombre}"
+    return almacenamiento.guardar(f"reportes/{nombre}", contenido, extension)
 
 
 def a_resumen(r: Reporte) -> ReporteResumen:

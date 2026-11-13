@@ -13,6 +13,8 @@ Aplicación web para reportar acumulación de residuos en Ocaña, Norte de Santa
 | Autenticación | JWT |
 | IA (en desarrollo) | Python, clasificación de residuos por imagen |
 
+> **¿Quieres verlo en internet?** La guía [DESPLIEGUE.md](DESPLIEGUE.md) explica cómo publicarlo gratis con Supabase (base de datos y fotos) y Vercel (backend y frontend).
+
 ## Requisitos previos
 
 Instala esto antes de empezar:

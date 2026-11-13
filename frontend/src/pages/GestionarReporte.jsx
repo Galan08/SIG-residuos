@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import api, { API_URL, mensajeError } from "../api";
+import api, { mensajeError, urlFoto } from "../api";
 import EstadoBadge from "../components/EstadoBadge";
 import MapaUbicacion from "../components/MapaUbicacion";
 import SelectorFoto from "../components/SelectorFoto";
 import { ESTADOS, fechaCorta, fechaHora } from "../estados";
-import { errorFoto } from "../fotos";
+import { errorFoto, reducirFoto } from "../fotos";
 import { coordenadas } from "../mapa";
 
 export default function GestionarReporte() {
@@ -52,7 +52,7 @@ export default function GestionarReporte() {
       let data = reporte;
       if (fotoCierre) {
         const datos = new FormData();
-        datos.append("archivo", fotoCierre);
+        datos.append("archivo", await reducirFoto(fotoCierre));
         data = (await api.post(`/reportes/${id}/foto-cierre`, datos)).data;
       }
       if (cambiaEstado) {
@@ -99,7 +99,7 @@ export default function GestionarReporte() {
 
           <h3>Evidencia del ciudadano</h3>
           <div className="foto">
-            {reporte.foto_url ? <img src={`${API_URL}${reporte.foto_url}`} alt="Foto del reporte" /> : <span>Sin foto</span>}
+            {reporte.foto_url ? <img src={urlFoto(reporte.foto_url)} alt="Foto del reporte" /> : <span>Sin foto</span>}
           </div>
           <p className="ayuda">{reporte.descripcion}</p>
 
@@ -133,7 +133,7 @@ export default function GestionarReporte() {
           <p className="campo">Foto de cierre {estado === "limpio" && !reporte.foto_cierre_url ? "(obligatoria)" : ""}</p>
           {reporte.foto_cierre_url && !fotoCierre ? (
             <div className="foto">
-              <img src={`${API_URL}${reporte.foto_cierre_url}`} alt="Foto de cierre" />
+              <img src={urlFoto(reporte.foto_cierre_url)} alt="Foto de cierre" />
             </div>
           ) : null}
           <SelectorFoto
